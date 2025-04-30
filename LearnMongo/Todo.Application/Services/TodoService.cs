@@ -1,0 +1,64 @@
+﻿using Todo.Application.DTOs;
+using Todo.Application.Interfaces;
+using Todo.Core.Entities;
+
+namespace Todo.Application.Services
+{
+    public class TodoService : ITodoService
+    {
+        private readonly ITodoRepository _repository;
+        public TodoService(ITodoRepository repository)
+        {
+            _repository = repository;
+        }
+        public async Task CreateTodoAsync(TodoItemDto item)
+        {
+            TodoItem todo = new TodoItem
+            {
+                Title = item.Title,
+                IsCompleted = item.IsCompleted,
+                CreatedAt = DateTime.Now,
+            };
+
+            await _repository.AddAsync(todo);
+        }
+
+        public async Task DeleteTodoAsync(int id)
+        {
+            await _repository.DeleteAsync(id);
+        }
+
+        public async Task<IEnumerable<TodoItemDto>?> GetAllTodosAsync()
+        {
+            var todos = await _repository.GetAllAsync();
+            if (todos == null)
+            {
+                return null;
+            }
+
+            var todoItems = todos.Select(item => new TodoItemDto
+            {
+                Id = item.Id,
+                Title = item.Title,
+                IsCompleted = item.IsCompleted
+            });
+            return todoItems;
+        }
+
+        public async Task<TodoItemDto?> GetTodoByIdAsync(int id)
+        {
+            var todoItem = await _repository.GetByIdAsync(id);
+            if (todoItem == null)
+            {
+                return null;
+            }
+            var dto = new TodoItemDto
+            {
+                Id = todoItem.Id,
+                IsCompleted = todoItem.IsCompleted,
+                Title = todoItem.Title,
+            };
+            return dto;
+        }
+    }
+}
