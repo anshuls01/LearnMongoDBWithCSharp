@@ -1,4 +1,5 @@
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Todo.Application.Interfaces;
 using Todo.Application.Services;
 using Todo.Application.Validators;
@@ -13,8 +14,13 @@ namespace Todo.WebApi
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
-            builder.Services.AddValidatorsFromAssemblyContaining<TodoItemDtoValidator>();
+            //builder.Services.AddValidatorsFromAssemblyContaining<TodoItemDtoValidator>();
+            builder.Services.AddControllers()
+                .AddFluentValidation(fv =>
+                {
+                    fv.RegisterValidatorsFromAssemblyContaining<TodoItemDtoValidator>();
+                });
+
             builder.Services.AddScoped<ITodoService, TodoService>();
             builder.Services.AddPersistence(builder.Configuration.GetConnectionString("DefaultConnection"));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

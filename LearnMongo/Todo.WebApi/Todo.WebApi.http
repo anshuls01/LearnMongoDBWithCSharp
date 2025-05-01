@@ -12,7 +12,9 @@ Accept: application/json
 POST {{Todo.WebApi_HostAddress}}/api/todo/
 Content-Type: application/json
 {
-  "Title": "read another book",
-  "IsCompleted": false
+ "Title": ""
 }
+###
+
+DELETE {{Todo.WebApi_HostAddress}}/api/todo/8
 ###

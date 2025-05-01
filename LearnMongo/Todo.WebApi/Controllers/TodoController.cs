@@ -44,10 +44,17 @@ namespace Todo.WebApi.Controllers
             {
                 return BadRequest();
             }
+
             await _todoService.CreateTodoAsync(todo);
 
             return CreatedAtAction(nameof(Get), new { id = todo.Id }, todo);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTodoItem(int id)
+        {
+            await _todoService.DeleteTodoAsync(id);
+            return Ok();
+        }
     }
 }
