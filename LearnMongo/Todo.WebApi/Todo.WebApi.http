@@ -1,6 +1,18 @@
 @Todo.WebApi_HostAddress = http://localhost:5183
 
-GET {{Todo.WebApi_HostAddress}}/weatherforecast/
+GET {{Todo.WebApi_HostAddress}}/api/todo/
 Accept: application/json
 
+###
+
+GET {{Todo.WebApi_HostAddress}}/api/todo/1
+Accept: application/json
+
+###
+POST {{Todo.WebApi_HostAddress}}/api/todo/
+Content-Type: application/json
+{
+  "Title": "read another book",
+  "IsCompleted": false
+}
 ###
