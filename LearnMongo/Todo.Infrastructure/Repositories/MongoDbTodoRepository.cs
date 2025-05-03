@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
+using Todo.Application.DTOs;
 using Todo.Application.Interfaces;
 using Todo.Core.Entities;
 
@@ -10,24 +8,37 @@ namespace Todo.Infrastructure.Repositories
 {
     public class MongoDbTodoRepository : ITodoRepository
     {
-        public Task AddAsync(TodoItem item, CancellationToken cancellationToken)
+        private readonly IMongoCollection<TodoItem> _collection;
+        public MongoDbTodoRepository(IMongoClient client, IConfiguration config)
         {
-            throw new NotImplementedException();
+            var database = client.GetDatabase("TodoDb");
+            _collection = database.GetCollection<TodoItem>("TodoItems");
+        }
+        public async Task AddAsync(TodoItem item, CancellationToken cancellationToken)
+        {
+            await _collection.InsertOneAsync(item, null, cancellationToken);
         }
 
-        public Task DeleteAsync(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _collection.DeleteOneAsync(x => x.Id == id, null, cancellationToken);
         }
 
-        public Task<IEnumerable<TodoItem>?> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<TodoItem>?> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var items = await _collection.Find(_ => true).ToListAsync(cancellationToken);
+
+            return items.Select(x => new TodoItem
+                                {
+                                    Id = x.Id,
+                                    Title = x.Title,
+                                    IsCompleted = x.IsCompleted
+                                }).ToList();
         }
 
-        public Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+           return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync(cancellationToken); 
         }
     }
 }

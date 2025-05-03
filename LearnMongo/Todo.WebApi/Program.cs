@@ -6,6 +6,7 @@ using Todo.Application.Services;
 using Todo.Application.Todos.Commands.CreateTodo;
 using Todo.Application.Validators;
 using Todo.Infrastructure.Extensions;
+using Todo.Infrastructure.Settings;
 namespace Todo.WebApi
 {
     public class Program
@@ -13,10 +14,15 @@ namespace Todo.WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            //configuration
+            builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
+                                .AddJsonFile("appsettings.json", optional:false,reloadOnChange:true)
+                                .AddUserSecrets<Program>()
+                                .AddEnvironmentVariables();
 
+
+            builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
             // Add services to the container.
-
-            //builder.Services.AddValidatorsFromAssemblyContaining<TodoItemDtoValidator>();
             builder.Services.AddControllers()
                 .AddFluentValidation(fv =>
                 {
@@ -26,7 +32,7 @@ namespace Todo.WebApi
             builder.Services.AddMediatR(typeof(AssemblyReference).Assembly, 
                                         typeof(CreateTodoCommandHandler).Assembly);
             builder.Services.AddScoped<ITodoService, TodoService>();
-            builder.Services.AddPersistence(builder.Configuration.GetConnectionString("DefaultConnection"));
+            builder.Services.AddPersistence(builder.Configuration);
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
