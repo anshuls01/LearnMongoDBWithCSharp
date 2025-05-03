@@ -12,7 +12,7 @@ Accept: application/json
 POST {{Todo.WebApi_HostAddress}}/api/todo/
 Content-Type: application/json
 {
- "Title": ""
+ "Title": "this is a new book"
 }
 ###
 

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Todo.Application.Interfaces;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Todo.Application.DTOs;
+using Todo.Application.Interfaces;
+using Todo.Application.Todos.Commands.CreateTodo;
 
 namespace Todo.WebApi.Controllers
 {
@@ -8,16 +10,18 @@ namespace Todo.WebApi.Controllers
     [Route("api/[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly ITodoService _todoService;
-        public TodoController(ITodoService todoService)
+        private readonly ITodoService todoService;
+        private readonly IMediator mediator;   
+        public TodoController(ITodoService _todoService, IMediator _mediator)
         {
-            _todoService = todoService;
+            todoService = _todoService;
+            mediator = _mediator;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItemDto>> GetTodoItem(int id)
         {
-            var todoItem = await _todoService.GetTodoByIdAsync(id);
+            var todoItem = await todoService.GetTodoByIdAsync(id);
             if (todoItem == null)
             {
                 return NotFound();
@@ -28,7 +32,7 @@ namespace Todo.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItemDto>>> Get()
         {
-            var todos = await _todoService.GetAllTodosAsync();
+            var todos = await todoService.GetAllTodosAsync();
             if (todos == null)
             {
                 return NotFound();
@@ -37,6 +41,20 @@ namespace Todo.WebApi.Controllers
             return Ok(todos);
         }
 
+        //[HttpPost]
+        //public async Task<ActionResult> Post([FromBody] TodoItemDto todo)
+        //{
+        //    if (todo == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    await todoService.CreateTodoAsync(todo);
+
+        //    return CreatedAtAction(nameof(Get), new { id = todo.Id }, todo);
+        //}
+
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] TodoItemDto todo)
         {
@@ -44,16 +62,16 @@ namespace Todo.WebApi.Controllers
             {
                 return BadRequest();
             }
-
-            await _todoService.CreateTodoAsync(todo);
-
+            await mediator.Send(new CreateTodoCommand(todo));
             return CreatedAtAction(nameof(Get), new { id = todo.Id }, todo);
         }
+
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTodoItem(int id)
         {
-            await _todoService.DeleteTodoAsync(id);
+            await todoService.DeleteTodoAsync(id);
             return Ok();
         }
     }

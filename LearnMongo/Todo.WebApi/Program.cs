@@ -1,7 +1,9 @@
-using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
+using System.Reflection.Metadata;
 using Todo.Application.Interfaces;
 using Todo.Application.Services;
+using Todo.Application.Todos.Commands.CreateTodo;
 using Todo.Application.Validators;
 using Todo.Infrastructure.Extensions;
 namespace Todo.WebApi
@@ -21,6 +23,8 @@ namespace Todo.WebApi
                     fv.RegisterValidatorsFromAssemblyContaining<TodoItemDtoValidator>();
                 });
 
+            builder.Services.AddMediatR(typeof(AssemblyReference).Assembly, 
+                                        typeof(CreateTodoCommandHandler).Assembly);
             builder.Services.AddScoped<ITodoService, TodoService>();
             builder.Services.AddPersistence(builder.Configuration.GetConnectionString("DefaultConnection"));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
