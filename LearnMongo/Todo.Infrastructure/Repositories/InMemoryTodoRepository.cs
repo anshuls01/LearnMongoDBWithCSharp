@@ -8,13 +8,13 @@ namespace Todo.Infrastructure.Repositories
     {
         private readonly List<TodoItem> _todos = new List<TodoItem>();
 
-        public Task AddAsync(TodoItem item)
+        public Task AddAsync(TodoItem item, CancellationToken cancellationToken)
         {
             _todos.Add(item);
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(int id)
+        public Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             TodoItem? item = _todos.Find(x => x.Id == id);
             if (item != null)
@@ -24,12 +24,12 @@ namespace Todo.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<TodoItem>?> GetAllAsync()
+        public async Task<IEnumerable<TodoItem>?> GetAllAsync(CancellationToken cancellationToken)
         {
             return await Task.FromResult(_todos);
         }
 
-        public async Task<TodoItem?> GetByIdAsync(int id)
+        public async Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var todo = _todos.FirstOrDefault(x => x.Id == id);
             return await Task.FromResult(todo);

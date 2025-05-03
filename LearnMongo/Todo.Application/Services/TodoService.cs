@@ -20,17 +20,17 @@ namespace Todo.Application.Services
                 CreatedAt = DateTime.Now,
             };
 
-            await _repository.AddAsync(todo);
+            await _repository.AddAsync(todo,new CancellationToken());
         }
 
         public async Task DeleteTodoAsync(int id)
         {
-            await _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(id, new CancellationToken());
         }
 
         public async Task<IEnumerable<TodoItemDto>?> GetAllTodosAsync()
         {
-            var todos = await _repository.GetAllAsync();
+            var todos = await _repository.GetAllAsync(new CancellationToken());
             if (todos == null)
             {
                 return null;
@@ -47,7 +47,7 @@ namespace Todo.Application.Services
 
         public async Task<TodoItemDto?> GetTodoByIdAsync(int id)
         {
-            var todoItem = await _repository.GetByIdAsync(id);
+            var todoItem = await _repository.GetByIdAsync(id, new CancellationToken());
             if (todoItem == null)
             {
                 return null;

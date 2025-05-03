@@ -9,28 +9,28 @@ namespace Todo.Infrastructure.Repositories
     public class EfCoreTodoRepository : ITodoRepository
     {
         private readonly AppDbContext _dbContext;
-        public EfCoreTodoRepository(AppDbContext dbContext)
+        public EfCoreTodoRepository(AppDbContext dbContext, CancellationToken cancellationToken)
         {
             _dbContext = dbContext;
         }
-        public async Task AddAsync(TodoItem item)
+        public async Task AddAsync(TodoItem item, CancellationToken cancellationToken)
         {
             _dbContext.Add(item);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TodoItem>?> GetAllAsync()
+        public async Task<IEnumerable<TodoItem>?> GetAllAsync(CancellationToken cancellationToken)
         {
             var todos = await _dbContext.TodoItems.ToListAsync();
             return todos;
         }
 
-        public async Task<TodoItem?> GetByIdAsync(int id)
+        public async Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var todoItem = await _dbContext.TodoItems.FindAsync(id);
             return todoItem;
         }
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var item = await _dbContext.TodoItems.FindAsync(id);
             if (item != null)
