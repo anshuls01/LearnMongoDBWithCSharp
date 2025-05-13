@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
-using Todo.Application.DTOs;
 using Todo.Application.Interfaces;
 using Todo.Core.Entities;
 
@@ -19,7 +18,7 @@ namespace Todo.Infrastructure.Repositories
             await _collection.InsertOneAsync(item, null, cancellationToken);
         }
 
-        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(string id, CancellationToken cancellationToken)
         {
             await _collection.DeleteOneAsync(x => x.Id == id, null, cancellationToken);
         }
@@ -36,9 +35,14 @@ namespace Todo.Infrastructure.Repositories
                                 }).ToList();
         }
 
-        public async Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<TodoItem?> GetByIdAsync(string id, CancellationToken cancellationToken)
         {
            return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync(cancellationToken); 
+        }
+
+        public Task UpdateAsync(TodoItem enitity, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Todo.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItemDto>> GetTodoItem(int id)
+        public async Task<ActionResult<TodoItemDto>> GetTodoItem(string id)
         {
             var todoItem = await todoService.GetTodoByIdAsync(id);
             if (todoItem == null)
@@ -69,7 +69,7 @@ namespace Todo.WebApi.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTodoItem(int id)
+        public async Task<ActionResult> DeleteTodoItem(string id)
         {
             await todoService.DeleteTodoAsync(id);
             return Ok();

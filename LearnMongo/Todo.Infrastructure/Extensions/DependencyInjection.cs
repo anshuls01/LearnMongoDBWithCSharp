@@ -22,6 +22,7 @@ namespace Todo.Infrastructure.Extensions
                 case "mongo":
                     services.AddSingleton<IMongoClient>(_ => new MongoClient(appSettings.MongoDb));
                     services.AddScoped<ITodoRepository, MongoDbTodoRepository>();
+                    services.AddScoped<IAccountRepository, MongoDbAccountRepository>();
                     break;
                 case "sqlite":
                     services.AddDbContext<AppDbContext>(options => options.UseSqlite(appSettings.DefaultConnection));

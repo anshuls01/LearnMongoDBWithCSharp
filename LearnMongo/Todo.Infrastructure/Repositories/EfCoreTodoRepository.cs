@@ -25,12 +25,12 @@ namespace Todo.Infrastructure.Repositories
             return todos;
         }
 
-        public async Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<TodoItem?> GetByIdAsync(string id, CancellationToken cancellationToken)
         {
             var todoItem = await _dbContext.TodoItems.FindAsync(id);
             return todoItem;
         }
-        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(string id, CancellationToken cancellationToken)
         {
             var item = await _dbContext.TodoItems.FindAsync(id);
             if (item != null)
@@ -38,6 +38,11 @@ namespace Todo.Infrastructure.Repositories
                 _dbContext.TodoItems.Remove(item);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public Task UpdateAsync(TodoItem enitity, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

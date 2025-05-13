@@ -23,7 +23,7 @@ namespace Todo.Application.Services
             await _repository.AddAsync(todo,new CancellationToken());
         }
 
-        public async Task DeleteTodoAsync(int id)
+        public async Task DeleteTodoAsync(string id)
         {
             await _repository.DeleteAsync(id, new CancellationToken());
         }
@@ -45,7 +45,7 @@ namespace Todo.Application.Services
             return todoItems;
         }
 
-        public async Task<TodoItemDto?> GetTodoByIdAsync(int id)
+        public async Task<TodoItemDto?> GetTodoByIdAsync(string id)
         {
             var todoItem = await _repository.GetByIdAsync(id, new CancellationToken());
             if (todoItem == null)

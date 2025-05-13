@@ -2,11 +2,8 @@
 
 namespace Todo.Application.Interfaces
 {
-    public interface ITodoRepository
+    public interface ITodoRepository:IRepository<TodoItem>
     {
-        Task<IEnumerable<TodoItem>?> GetAllAsync(CancellationToken cancellationToken);
-        Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken);
-        Task AddAsync(TodoItem item, CancellationToken cancellationToken);
-        Task DeleteAsync(int id, CancellationToken cancellationToken);
+        // more methods to implement specific to todo
     }
 }

@@ -5,8 +5,8 @@ namespace Todo.Application.Interfaces
     public interface ITodoService
     {
         Task<IEnumerable<TodoItemDto>?> GetAllTodosAsync();
-        Task<TodoItemDto?> GetTodoByIdAsync(int id);
+        Task<TodoItemDto?> GetTodoByIdAsync(string id);
         Task CreateTodoAsync(TodoItemDto item);
-        Task DeleteTodoAsync(int id);
+        Task DeleteTodoAsync(string id);
     }
 }

@@ -14,7 +14,7 @@ namespace Todo.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(int id, CancellationToken cancellationToken)
+        public Task DeleteAsync(string id, CancellationToken cancellationToken)
         {
             TodoItem? item = _todos.Find(x => x.Id == id);
             if (item != null)
@@ -29,10 +29,15 @@ namespace Todo.Infrastructure.Repositories
             return await Task.FromResult(_todos);
         }
 
-        public async Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<TodoItem?> GetByIdAsync(string id, CancellationToken cancellationToken)
         {
             var todo = _todos.FirstOrDefault(x => x.Id == id);
             return await Task.FromResult(todo);
+        }
+
+        public Task UpdateAsync(TodoItem enitity, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

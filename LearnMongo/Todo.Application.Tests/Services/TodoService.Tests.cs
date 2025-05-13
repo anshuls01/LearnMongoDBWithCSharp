@@ -13,7 +13,7 @@ namespace Todo.Application.Tests.Services
         {
             //setup
             var mockRepo = new Mock<ITodoRepository>();
-            mockRepo.Setup(x => x.GetAllAsync(new CancellationToken())).ReturnsAsync(new List<TodoItem> { new TodoItem() { IsCompleted = false, Title = "Read Book", CreatedAt = DateTime.Now, Id = 1 } });
+            mockRepo.Setup(x => x.GetAllAsync(new CancellationToken())).ReturnsAsync(new List<TodoItem> { new TodoItem() { IsCompleted = false, Title = "Read Book", CreatedAt = DateTime.Now, Id = "1" } });
 
             //Act
             var service = new TodoService(mockRepo.Object);

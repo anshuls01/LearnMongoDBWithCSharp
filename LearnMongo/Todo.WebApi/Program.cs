@@ -16,7 +16,7 @@ namespace Todo.WebApi
             var builder = WebApplication.CreateBuilder(args);
             //configuration
             builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
-                                .AddJsonFile("appsettings.json", optional:false,reloadOnChange:true)
+                                .AddJsonFile("appsettings.json", optional:true,reloadOnChange:true)
                                 .AddUserSecrets<Program>()
                                 .AddEnvironmentVariables();
 
